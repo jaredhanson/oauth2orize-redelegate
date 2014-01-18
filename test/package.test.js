@@ -1,11 +1,12 @@
 /* global describe, it, expect */
 
-var pkg = require('..');
+var redelegate = require('..');
 
 describe('oauth2orize-redelegate', function() {
   
-  it('should export object', function() {
-    expect(pkg).to.be.an('object');
+  it('should export exchanges', function() {
+    expect(redelegate.exchange).to.be.an('object');
+    expect(redelegate.exchange.redelegate).to.be.a('function');
   });
   
 });

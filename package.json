@@ -1,6 +1,6 @@
 {
   "name": "oauth2orize-redelegate",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Token redelegation exchange for OAuth2orize.",
   "keywords": [
     "oauth2"
@@ -36,6 +36,6 @@
     "node": "*"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha --reporter spec --require test/bootstrap/node test/*.test.js"
+    "test": "node_modules/.bin/mocha --reporter spec --require test/bootstrap/node test/*.test.js test/**/*.test.js"
   }
 }

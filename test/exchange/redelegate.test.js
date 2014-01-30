@@ -150,7 +150,7 @@ describe('exchange.redelegate', function() {
     });
   });
   
-  describe('issuing an access token based on array of scopes', function() {
+  describe('issuing an access token based on list of scopes', function() {
     var response, err;
 
     before(function(done) {
@@ -317,6 +317,44 @@ describe('exchange.redelegate', function() {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.message).to.equal('OAuth2orize requires body parsing. Did you forget app.use(express.bodyParser())?');
     });
+  });
+  
+  describe('with user property option', function() {
+    
+    describe('issuing an access token', function() {
+      var response, err;
+
+      before(function(done) {
+        function issue(client, token, done) {
+          if (client.id == 'c123' && token == 'shh') {
+            return done(null, 's3cr1t')
+          }
+          return done(new Error('something is wrong'));
+        }
+      
+        chai.connect.use(redelegate({ userProperty: 'client' }, issue))
+          .req(function(req) {
+            req.client = { id: 'c123' };
+            req.body = { token: 'shh' };
+          })
+          .end(function(res) {
+            response = res;
+            done();
+          })
+          .dispatch();
+      });
+    
+      it('should respond with headers', function() {
+        expect(response.getHeader('Content-Type')).to.equal('application/json');
+        expect(response.getHeader('Cache-Control')).to.equal('no-store');
+        expect(response.getHeader('Pragma')).to.equal('no-cache');
+      });
+    
+      it('should respond with body', function() {
+        expect(response.body).to.equal('{"access_token":"s3cr1t","token_type":"Bearer"}');
+      });
+    });
+    
   });
   
 });

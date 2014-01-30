@@ -1,3 +1,5 @@
+/* global describe, it, expect */
+
 var TokenError = require('../../lib/errors/tokenerror');
 
 

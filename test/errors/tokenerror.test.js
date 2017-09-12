@@ -16,7 +16,6 @@ describe('TokenError', function() {
     });
     
     it('should format correctly', function() {
-      //expect(err.toString()).to.equal('AuthorizationError');
       expect(err.toString().indexOf('TokenError')).to.equal(0);
     });
   });

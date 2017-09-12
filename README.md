@@ -1,10 +1,9 @@
 # oauth2orize-redelegate
 
-[![Build](https://travis-ci.org/jaredhanson/oauth2orize-redelegate.png)](https://travis-ci.org/jaredhanson/oauth2orize-redelegate)
-[![Coverage](https://coveralls.io/repos/jaredhanson/oauth2orize-redelegate/badge.png)](https://coveralls.io/r/jaredhanson/oauth2orize-redelegate)
-[![Quality](https://codeclimate.com/github/jaredhanson/oauth2orize-redelegate.png)](https://codeclimate.com/github/jaredhanson/oauth2orize-redelegate)
-[![Dependencies](https://david-dm.org/jaredhanson/oauth2orize-redelegate.png)](https://david-dm.org/jaredhanson/oauth2orize-redelegate)
-[![Tips](http://img.shields.io/gittip/jaredhanson.png)](https://www.gittip.com/jaredhanson/)
+[![Build](https://img.shields.io/travis/jaredhanson/oauth2orize-redelegate.svg)](https://travis-ci.org/jaredhanson/oauth2orize-redelegate)
+[![Coverage](https://img.shields.io/coveralls/jaredhanson/oauth2orize-redelegate.svg)](https://coveralls.io/r/jaredhanson/oauth2orize-redelegate)
+[![Quality](https://img.shields.io/codeclimate/github/jaredhanson/oauth2orize-redelegate.svg?label=quality)](https://codeclimate.com/github/jaredhanson/oauth2orize-redelegate)
+[![Dependencies](https://img.shields.io/david/jaredhanson/oauth2orize-redelegate.svg)](https://david-dm.org/jaredhanson/oauth2orize-redelegate)
 
 
 Token redelegation exchange for [OAuth2orize](https://github.com/jaredhanson/oauth2orize).

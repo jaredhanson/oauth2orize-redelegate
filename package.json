@@ -17,10 +17,11 @@
   "bugs": {
     "url": "http://github.com/jaredhanson/oauth2orize-redelegate/issues"
   },
+  "license": "MIT",
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://www.opensource.org/licenses/MIT"
+      "url": "http://opensource.org/licenses/MIT"
     }
   ],
   "main": "./lib",
@@ -28,8 +29,9 @@
     "utils-merge": "1.x.x"
   },
   "devDependencies": {
-    "mocha": "1.x.x",
-    "chai": "1.x.x",
+    "make-node": "0.3.x",
+    "mocha": "2.x.x",
+    "chai": "2.x.x",
     "chai-connect-middleware": "0.3.x"
   },
   "engines": {

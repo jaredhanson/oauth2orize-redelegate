@@ -21,10 +21,10 @@ describe('exchange.redelegate', function() {
 
     before(function(done) {
       function issue(client, token, done) {
-        if (client.id == 'c123' && token == 'shh') {
-          return done(null, 's3cr1t');
-        }
-        return done(new Error('something is wrong'));
+        if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
+        if (token !== 'shh') { return done(new Error('incorrect token argument')); }
+        
+        return done(null, 's3cr1t');
       }
       
       chai.connect.use(redelegate(issue))
@@ -55,10 +55,10 @@ describe('exchange.redelegate', function() {
 
     before(function(done) {
       function issue(client, token, done) {
-        if (client.id == 'c123' && token == 'shh') {
-          return done(null, 's3cr1t', { 'expires_in': 3600 });
-        }
-        return done(new Error('something is wrong'));
+        if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
+        if (token !== 'shh') { return done(new Error('incorrect token argument')); }
+        
+        return done(null, 's3cr1t', { 'expires_in': 3600 });
       }
       
       chai.connect.use(redelegate(issue))
@@ -89,10 +89,10 @@ describe('exchange.redelegate', function() {
 
     before(function(done) {
       function issue(client, token, done) {
-        if (client.id == 'c123' && token == 'shh') {
-          return done(null, 's3cr1t', { 'token_type': 'foo', 'expires_in': 3600 });
-        }
-        return done(new Error('something is wrong'));
+        if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
+        if (token !== 'shh') { return done(new Error('incorrect token argument')); }
+        
+        return done(null, 's3cr1t', { 'token_type': 'foo', 'expires_in': 3600 });
       }
       
       chai.connect.use(redelegate(issue))
@@ -123,10 +123,11 @@ describe('exchange.redelegate', function() {
 
     before(function(done) {
       function issue(client, token, scope, done) {
-        if (client.id == 'c123' && token == 'shh' && scope.length == 1 && scope[0] == 'read') {
-          return done(null, 's3cr1t');
-        }
-        return done(new Error('something is wrong'));
+        if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
+        if (token !== 'shh') { return done(new Error('incorrect token argument')); }
+        if (scope.length !== 1 || scope[0] !== 'read') { return done(new Error('incorrect scope argument')); }
+        
+        return done(null, 's3cr1t');
       }
       
       chai.connect.use(redelegate(issue))
@@ -157,10 +158,11 @@ describe('exchange.redelegate', function() {
 
     before(function(done) {
       function issue(client, token, scope, done) {
-        if (client.id == 'c123' && token == 'shh' && scope.length == 2 && scope[0] == 'read' && scope[1] == 'write') {
-          return done(null, 's3cr1t');
-        }
-        return done(new Error('something is wrong'));
+        if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
+        if (token !== 'shh') { return done(new Error('incorrect token argument')); }
+        if (scope.length !== 2 || scope[0] !== 'read' || scope[1] !== 'write') { return done(new Error('incorrect scope argument')); }
+        
+        return done(null, 's3cr1t');
       }
       
       chai.connect.use(redelegate(issue))
@@ -215,12 +217,37 @@ describe('exchange.redelegate', function() {
     });
   });
   
-  describe('handling a request without a token', function() {
+  describe('handling a request in which body has not been parsed', function() {
     var err;
 
     before(function(done) {
       function issue(client, token, done) {
         return done(null, false);
+      }
+      
+      chai.connect.use(redelegate(issue))
+        .req(function(req) {
+          req.user = { id: 'c123' };
+        })
+        .next(function(e) {
+          err = e;
+          done();
+        })
+        .dispatch();
+    });
+    
+    it('should error', function() {
+      expect(err).to.be.an.instanceOf(Error);
+      expect(err.message).to.equal('OAuth2orize requires body parsing. Did you forget app.use(express.bodyParser())?');
+    });
+  });
+  
+  describe('handling a request without token parameter', function() {
+    var err;
+
+    before(function(done) {
+      function issue(client, token, done) {
+        return done(null, '.ignore');
       }
       
       chai.connect.use(redelegate(issue))
@@ -270,7 +297,7 @@ describe('exchange.redelegate', function() {
     });
   });
   
-  describe('throwing an exception while issuing an access token', function() {
+  describe('encountering an exception while issuing an access token', function() {
     var err;
 
     before(function(done) {
@@ -293,31 +320,6 @@ describe('exchange.redelegate', function() {
     it('should error', function() {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.message).to.equal('something went horribly wrong');
-    });
-  });
-  
-  describe('handling a request in which the body was not parsed', function() {
-    var err;
-
-    before(function(done) {
-      function issue(client, token, done) {
-        return done(null, false);
-      }
-      
-      chai.connect.use(redelegate(issue))
-        .req(function(req) {
-          req.user = { id: 'c123' };
-        })
-        .next(function(e) {
-          err = e;
-          done();
-        })
-        .dispatch();
-    });
-    
-    it('should error', function() {
-      expect(err).to.be.an.instanceOf(Error);
-      expect(err.message).to.equal('OAuth2orize requires body parsing. Did you forget app.use(express.bodyParser())?');
     });
   });
   

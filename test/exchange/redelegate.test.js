@@ -478,10 +478,4 @@ describe('exchange.redelegate', function() {
     
   }); // options
   
-  describe('with multiple scope separator option', function() {
-    
-    
-    
-  });
-  
 });

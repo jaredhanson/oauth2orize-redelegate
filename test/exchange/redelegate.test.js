@@ -188,6 +188,80 @@ describe('exchange.redelegate', function() {
     });
   });
   
+  describe('issuing an access token based on scope and body', function() {
+    var response;
+
+    before(function(done) {
+      function issue(client, token, scope, body, done) {
+        if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
+        if (token !== 'shh') { return done(new Error('incorrect token argument')); }
+        if (scope.length !== 1 || scope[0] !== 'read') { return done(new Error('incorrect scope argument')); }
+        if (body.foo !== 'bar') { return done(new Error('incorrect body argument')); }
+        
+        return done(null, 's3cr1t');
+      }
+      
+      chai.connect.use(redelegate(issue))
+        .req(function(req) {
+          req.user = { id: 'c123' };
+          req.body = { token: 'shh', scope: 'read', foo: 'bar' };
+        })
+        .end(function(res) {
+          response = res;
+          done();
+        })
+        .dispatch();
+    });
+    
+    it('should respond with headers', function() {
+      expect(response.getHeader('Content-Type')).to.equal('application/json');
+      expect(response.getHeader('Cache-Control')).to.equal('no-store');
+      expect(response.getHeader('Pragma')).to.equal('no-cache');
+    });
+    
+    it('should respond with body', function() {
+      expect(response.body).to.equal('{"access_token":"s3cr1t","token_type":"Bearer"}');
+    });
+  });
+  
+  describe('issuing an access token based on scope, body, and authInfo', function() {
+    var response;
+
+    before(function(done) {
+      function issue(client, token, scope, body, authInfo, done) {
+        if (client.id !== 'c123') { return done(new Error('incorrect client argument')); }
+        if (token !== 'shh') { return done(new Error('incorrect token argument')); }
+        if (scope.length !== 1 || scope[0] !== 'read') { return done(new Error('incorrect scope argument')); }
+        if (body.foo !== 'bar') { return done(new Error('incorrect body argument')); }
+        if (authInfo.ip !== '127.0.0.1') { return done(new Error('incorrect authInfo argument')); }
+        
+        return done(null, 's3cr1t');
+      }
+      
+      chai.connect.use(redelegate(issue))
+        .req(function(req) {
+          req.user = { id: 'c123' };
+          req.body = { token: 'shh', scope: 'read', foo: 'bar' };
+          req.authInfo = { ip: '127.0.0.1' };
+        })
+        .end(function(res) {
+          response = res;
+          done();
+        })
+        .dispatch();
+    });
+    
+    it('should respond with headers', function() {
+      expect(response.getHeader('Content-Type')).to.equal('application/json');
+      expect(response.getHeader('Cache-Control')).to.equal('no-store');
+      expect(response.getHeader('Pragma')).to.equal('no-cache');
+    });
+    
+    it('should respond with body', function() {
+      expect(response.body).to.equal('{"access_token":"s3cr1t","token_type":"Bearer"}');
+    });
+  });
+  
   describe('not issuing an access token', function() {
     var err;
 

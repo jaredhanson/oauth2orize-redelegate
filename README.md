@@ -21,36 +21,32 @@ to communicate with another service in order to fulfill the original request.
 
 #### Register Exchange
 
-Register the exchange with an OAuth 2.0 server.
+Register the exchange with a `Server` instance and implement the `issue`
+callback:
 
 ```javascript
 var redelegate = require('oauth2orize-redelegate').exchange.redelegate;
 
 server.exchange('urn:ietf:params:oauth:grant_type:redelegate', redelegate(function(client, token, scope, done) {
-  AccessToken.verify(token, function(err, t) {
-    if (err) { return done(err); }
-
-    var random = utils.uid(256);
-    var at = new AccessToken(random, t.userId, client.id, t.scope);
-    at.save(function(err) {
-      if (err) { return done(err); }
-      return done(null, random);
-    });
-  });
+  // TODO:
+  // 1. Verify the access token.
+  // 2. Ensure that the token is being exchanged by resource server for which it
+  //    is intended.
+  // 3. Issue a deriviative token with equal or lesser scope.
 });
 ```
 
-## Implementation
+## Considerations
 
-This module is implemented based on [A Method of Bearer Token Redelegation and Chaining for OAuth 2](http://tools.ietf.org/html/draft-richer-oauth-chain-00),
-Draft 00.  Implementers are encouraged to track the progress of this
-specification and update update their implementations as necessary.
-Furthermore, the implications of relying on a non-final draft specification
-should be understood prior to deployment.
+#### Specification
 
-## Related Modules
-
-- [oauth2orize-chain](https://github.com/jaredhanson/oauth2orize-chain) — chained token exchange
+This module is implemented based on [A Method of Bearer Token Redelegation and Chaining for OAuth 2](https://tools.ietf.org/html/draft-richer-oauth-chain-00),
+draft version 00.  As a draft, the specification remains a work-in-progress and
+is *not* final.  The specification is under discussion within the [OAuth Working Group](https://datatracker.ietf.org/wg/oauth/about/)
+of the [IETF](https://www.ietf.org/).  Implementers are encouraged to track the
+progress of this specification and update implementations as necessary.
+Furthermore, the implications of relying on non-final specifications should be
+understood prior to deployment.
 
 ## Tests
 

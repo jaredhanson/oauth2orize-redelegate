@@ -6,7 +6,7 @@
 [![Dependencies](https://img.shields.io/david/jaredhanson/oauth2orize-redelegate.svg)](https://david-dm.org/jaredhanson/oauth2orize-redelegate)
 
 
-Token redelegation exchange for [OAuth2orize](https://github.com/jaredhanson/oauth2orize).
+Token redelegation and chaining exchange for [OAuth2orize](https://github.com/jaredhanson/oauth2orize).
 
 This exchange is used by a resource server to exchange an access token it has
 recieved from a client for a derivative token for use with another resource

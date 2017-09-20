@@ -1,6 +1,6 @@
 {
   "name": "oauth2orize-redelegate",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Token redelegation and chaining exchange for OAuth2orize.",
   "keywords": [
     "oauth2"

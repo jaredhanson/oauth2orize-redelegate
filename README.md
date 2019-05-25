@@ -52,13 +52,6 @@ progress of this specification and update implementations as necessary.
 Furthermore, the implications of relying on non-final specifications should be
 understood prior to deployment.
 
-## Sponsorship
-
-OAuth2orize is open source software.  Ongoing development is made possible by
-generous contributions from [individuals and corporations](https://github.com/jaredhanson/oauth2orize/blob/master/SPONSORS.md).
-To learn more about how you can help keep this project financially sustainable,
-please visit Jared Hanson's page on [Patreon](https://www.patreon.com/jaredhanson).
-
 ## License
 
 [The MIT License](http://opensource.org/licenses/MIT)
